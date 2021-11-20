@@ -2,6 +2,8 @@
 // const router = express.Router();
 const db = require('./config/connections');
 const inquirer = require('inquirer');
+const queryFunctions = require('./utils/queryFunctions');
+    
 
 const initialQuestions = [
     {
@@ -69,7 +71,7 @@ function init(){
     inquirer.prompt(initialQuestions)
     .then((answers) => {
         
-        return;
+        return functions
     })
     err => {
         if (err) throw err;
