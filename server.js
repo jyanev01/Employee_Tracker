@@ -1,30 +1,28 @@
 const express = require('express');
 const db = require('./db/connections');
-const inquirer = require('inquirer');
+const apiRoutes = require('./routes');
+
+const PORT = process.env.PORT || 3001;
+const app = express();
 
 // Express middleware
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
+// Use apiRoutes
+app.use('/api', apiRoutes);
 
-const init = () => {
-    return inquirer.prompt([
-        {
-            type: 'list',
-                name: 'inital screen',
-                message: "What would you like to do?",
-                choises: ['View All Employees',
-                    'View All Employees by Department',
-                    'View All Employees by Manager',
-                    'Add New Employee',
-                    'Remove Employee',
-                    '',
-                    ''],
-        }
-    ]).then((answers) => {
-        return;
-    })
-};
-console.log(init());
+// Not found response for unmatched routes
+app.use((req, res) => {
+    res.status(404).end();
+});
 
-init();
+// Start server after DB connection
+db.connect(err => {
+    if (err) throw err;
+    console.log('Database connected.');
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+});
+
