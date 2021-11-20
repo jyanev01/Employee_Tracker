@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const db = require('../db/connections');
+// const express = require('express');
+// const router = express.Router();
+const db = require('./config/connections');
 const inquirer = require('inquirer');
 
 const initialQuestions = [
@@ -8,7 +8,7 @@ const initialQuestions = [
         type: 'list',
         name: 'inital screen',
         message: "What would you like to do?",
-        choises: ['View All Employees',
+        choices: ['View All Employees',
             'View All Departments',
             'View All Roles',
             'View All Employees',
@@ -39,21 +39,10 @@ const addEmployeeQuestions = [
 
 const addDepartmentQuestions = [
     {
-        name: 'first_name',
+        name: 'f_name',
         type: 'input',
-        message: "Enter employee's first name",
+        message: "What is the name of the new department that you would like to add?",
     },
-    {
-        name: 'last_name',
-        type: 'input',
-        message: "Enter employee's last name",
-    },
-    {
-        name: 'first_name',
-        type: 'input',
-        message: "Enter employee's first name",
-
-    }
 ];
 
 const addEmployeeQuestions = [
@@ -79,6 +68,7 @@ const addEmployeeQuestions = [
 function init(){
     inquirer.prompt(initialQuestions)
     .then((answers) => {
+        
         return;
     })
     err => {
