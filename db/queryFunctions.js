@@ -273,9 +273,9 @@ function updateEmployee () {
     });
 }
 
-function deleteEmployee() {
-    
-}
+// function deleteEmployee() {
+
+// }
 
 
 function exit () {
