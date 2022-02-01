@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 
-const db = require('./db/connections');
+const db = require('./connections');
 
-beginQuestions = async () => {
-    const allQuestions = await inquirer.prompt([
+function beginQuestions () {
+    const allQuestions =  await inquirer.prompt([
         {
             type: 'list',
             name: 'initialQuestions',
@@ -198,7 +198,7 @@ function addEmployee() {
         }
     });
 
-    const res = await inquirer.prompt([
+    const res =  await  inquirer.prompt([
         {
             name: 'firstName',
             type: 'input',
@@ -249,7 +249,7 @@ function updateEmployee () {
         }
     });
 
-    const res = await inquirer.prompt([
+    const res = await  inquirer.prompt([
         {
             name: 'name',
             type: 'list',
@@ -283,4 +283,4 @@ function exit () {
     process.exit();
 }
 
-beginQuestions();
+module.exports = { beginQuestions};
