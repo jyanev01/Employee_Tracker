@@ -181,7 +181,7 @@ function addEmployee() {
     
     let roles = [];
 
-    db.query(`SELECT *FROM role`, (err, rows) => {
+    db.query(`SELECT * FROM role`, (err, rows) => {
         if (err) throw err;
 
         for (let i= 0; i < rows.length; i++) {
@@ -283,4 +283,4 @@ function exit () {
     process.exit();
 }
 
-module.exports = { beginQuestions};
+beginQuestions();
