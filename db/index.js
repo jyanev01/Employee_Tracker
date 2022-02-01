@@ -51,7 +51,7 @@ beginQuestions = async () => {
 
 viewAllEmployees= async () => {
     db.query(
-        `SELECT * FROM department`,
+        `SELECT * FROM departments`,
         function (err, res) {
             if (err) throw err
             console.log("\n");
@@ -63,9 +63,9 @@ viewAllEmployees= async () => {
 
 viewAllRoles = async () => {
     db.query(
-        `SELECT role.title, role.salary, role.department_id AS dept_id, department.name AS name_of_dept
+        `SELECT roles.title, roles.salary, role.department_id AS dept_id, department.name AS name_of_dept
         FROM role
-        LEFT JOIN department ON department.id = role.department_id
+        LEFT JOIN department ON departments.id = role.department_id
         ORDER BY department_id;`,
         function (err, res) {
             if (err) throw err
@@ -78,11 +78,11 @@ viewAllRoles = async () => {
 
 viewAllEmployees= async () => {
     db.query(
-        `SELECT employees.id, employees.first_name, role.title, department.name AS department, role.salary, CONCAT_WS('', manager.first_name, manager.last_name) AS manager
-            FROM employee
-            LEFT JOIN role ON employee.role_id = role.id
-            LEFT JOIN department ON department.id = role.department_id
-            LEFT JOIN employee manager ON employee.manager_id = manager.id;`,
+        `SELECT employees.id, employees.first_name, roles.title, departments.name AS departments, roles.salary, CONCAT_WS('', manager.first_name, manager.last_name) AS manager
+            FROM employees
+            LEFT JOIN roles ON employee.role_id = role.id
+            LEFT JOIN departments ON department.id = role.department_id
+            LEFT JOIN employees manager ON employees.manager_id = manager.id;`,
         function (err, res) {
             if (err) throw err
             console.log("\n");
@@ -97,18 +97,14 @@ addDepartment = async () => {
     const res = await inquirer.prompt([
         {
             type: 'input',
-            name: 'name',
+            name: 'nameDept',
             message: 'What Deparment would you like to add?'
 
         },
-        {
-            name: 'id',
-            type: 'input',
-            message: "what is the new Deparment's ID?"
-        }
-    ]).then(function (answers) {
-        connection.query('INSERT INTO department SET ?',
-            { name: answers.name, id: answers.id },
+    ]);
+
+    const dept= db.query(
+        'INSERT INTO departments SET ?',{ name: res.nameDept},
             function (err, res) {
                 if (err) throw err
                 console.log("\n");
@@ -116,14 +112,14 @@ addDepartment = async () => {
                 beginQuestions();
 
             }
-        )
-    });
+        
+    );
 }
 
 addRole = async () => {
     let departments = [];
 
-    db.query(`SELECT *FROM department`, (err, rows) => {
+    db.query(`SELECT *FROM departments`, (err, rows) => {
         if (err) throw err;
         for (let i = 0; i < rows.length; i++) {
             departments.push({ name: rows[i], name, value: rows[i], id });
@@ -166,7 +162,7 @@ addRole = async () => {
 
     ]);
 
-    const sql = `INSERT role( title, salary, department_id) VALUES (?,?,?)`;
+    const sql = `INSERT roles( title, salary, department_id) VALUES (?,?,?)`;
     const params = [res.role, res.salary, res.department];
 
     db.query(sql, params, (err, row) => {
@@ -182,7 +178,7 @@ addEmployee = async () => {
     
     let roles = [];
 
-    db.query(`SELECT * FROM role`, (err, rows) => {
+    db.query(`SELECT * FROM roles`, (err, rows) => {
         if (err) throw err;
 
         for (let i= 0; i < rows.length; i++) {
@@ -191,7 +187,7 @@ addEmployee = async () => {
     });
 
     let managers = [];
-    db.query(`SELECT CONCAT_WS(' ',employee.first_name,employee.last_name) AS manager, employee.id AS manager_id FROM employee`, (err, rows) => {
+    db.query(`SELECT CONCAT_WS(' ',employees.first_name,employees.last_name) AS manager, employees.id AS manager_id FROM employees`, (err, rows) => {
         if (err) throw err;
 
         for (let i= 0; i < rows.length; i++) {
@@ -224,7 +220,7 @@ addEmployee = async () => {
         }
     ]);
 
-    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
+    const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
     const params = [res.firstName, res.lastName, res.role, res.manager];
     db.query(sql, params, (err, row) => {
         if (err) throw err
@@ -235,7 +231,7 @@ addEmployee = async () => {
 
 updateEmployee = async () => {
     let employees = [];
-    db.query(`SELECT CONCACT_WS('', employee.first_name, employee.last_name) AS employee_id FROM employee `, (err, rows) => {
+    db.query(`SELECT CONCACT_WS('', employees.first_name, employees.last_name) AS employees_id FROM employees `, (err, rows) => {
         if (err) throw err;
         for (let i =0; i < rows.lenght; i++) {
             employees.push({ name: rows[i].employee, value: rows[i].employee_id});
@@ -243,7 +239,7 @@ updateEmployee = async () => {
     });
 
     let roles = [];
-    dqb.query(`SELECT * FROM role`, (err, rows) => {
+    dqb.query(`SELECT * FROM roles`, (err, rows) => {
         if (err) throw err;
         for (let i = 0; i < rows.length; i++) {
             roles.push({ name: rows[i].title, values: rows[i].id});
