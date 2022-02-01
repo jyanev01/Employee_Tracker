@@ -39,7 +39,7 @@ beginQuestions = async () => {
             addEmployee();
             break;
         case 'update an employee role':
-            UpdateEmployee();
+            updateEmployee();
             break;
         case 'Exit':
             exit();
@@ -177,6 +177,7 @@ function addRole () {
 }
 
 function addEmployee() {
+    
     let roles = [];
 
     db.query(`SELECT *FROM role`, (err, rows) => {
@@ -184,6 +185,15 @@ function addEmployee() {
 
         for (let i= 0; i < rows.length; i++) {
             roles.push({name: rows[i].title, value: rows[i].id});
+        }
+    });
+
+    let managers = [];
+    db.query(`SELECT CONCAT_WS(' ',employee.first_name,employee.last_name) AS manager, employee.id AS manager_id FROM employee`, (err, rows) => {
+        if (err) throw err;
+
+        for (let i= 0; i < rows.length; i++) {
+            managers.push({name: rows[i].manager, value: rows[i].manager_id});
         }
     });
 
@@ -213,9 +223,58 @@ function addEmployee() {
     ]);
 
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
-    const params = [res.firstName, res.lastName, res.role, res.manager]
+    const params = [res.firstName, res.lastName, res.role, res.manager];
+    db.query(sql, params, (err, row) => {
+        if (err) throw err
+        console.log("\n");
+        beginQuestions();
+    });
+}
 
+function updateEmployee () {
+    let employees = [];
+    db.query(`SELECT CONCACT_WS('', employee.first_name, employee.last_name) AS employee_id FROM employee `, (err, rows) => {
+        if (err) throw err;
+        for (let i =0; i < rows.lenght; i++) {
+            employees.push({ name: rows[i].employee, value: rows[i].employee_id});
+        }
+    });
 
+    let roles = [];
+    dqb.query(`SELECT * FROM role`, (err, rows) => {
+        if (err) throw err;
+        for (let i = 0; i < rows.length; i++) {
+            roles.push({ name: rows[i].title, values: rows[i].id});
+        }
+    });
+
+    const res = await inquirer.prompt([
+        {
+            name: 'name',
+            type: 'list',
+            message: 'What is the name of the employee?',
+            choices: employees
+            
+        },
+        {
+            name: 'role',
+            type: 'list',
+            message: "What is the employee's new role?",
+            choices: roles
+        }
+    ]);
+
+    const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
+    const params = [res.role, res.name];
+    db.query(sql, params, (err, row) => {
+        if (err) throw err;
+        console.log("\n");
+        beginQuestions();
+    });
+}
+
+function deleteEmployee() {
+    
 }
 
 
