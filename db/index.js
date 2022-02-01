@@ -11,9 +11,12 @@ viewAllDepartments = () => {
         function(err, res) {
             beginQuestions();
         }
-    )
+    );
 }
 
+viewAllEmployees = () => {
+    db.query
+}
 
 function init(){
     inquirer.prompt(initialQuestions)
