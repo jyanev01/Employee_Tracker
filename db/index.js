@@ -63,9 +63,9 @@ viewAllEmployees= async () => {
 
 viewAllRoles = async () => {
     db.query(
-        `SELECT roles.title, roles.salary, role.department_id AS dept_id, department.name AS name_of_dept
-        FROM role
-        LEFT JOIN department ON departments.id = role.department_id
+        `SELECT roles.title, roles.salary, role.department_id AS dept_id, departments.name AS name_of_dept
+        FROM roles
+        LEFT JOIN departments ON departments.id = roles.department_id
         ORDER BY department_id;`,
         function (err, res) {
             if (err) throw err
@@ -107,7 +107,7 @@ addDepartment = async () => {
         'INSERT INTO departments SET ?',{ name: res.nameDept},
             function (err, res) {
                 if (err) throw err
-                console.log("\n");
+                // console.log("\n");
                 console.table(res);
                 beginQuestions();
 
