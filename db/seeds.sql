@@ -1,6 +1,6 @@
-USE employees_db;
+USE Employees_traceker_db;
 
-INSERT INTO department (name)
+INSERT INTO departments (name)
 VALUES ('Sales'),
        ('Engineering'),
        ('Finance'),
@@ -8,7 +8,7 @@ VALUES ('Sales'),
 
 
 
-INSERT INTO role (title, salary, department_id )
+INSERT INTO roles (title, salary, department_id )
 VALUES ('CEO', 200, 1),
         ('CTO', 130, 2),
         ('CFO', 120, 3),
@@ -16,6 +16,6 @@ VALUES ('CEO', 200, 1),
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES ('James', 'Bond', 1, NULL),
-    ('Mrs', 'MoneyPenny',3, 1),
-    ('John', 'Smith', 2, 1),
+    ('Mrs', 'MoneyPenny',3, NULL),
+    ('John', 'Smith', 2, NULL),
     ('Jeffrey', 'Baker', 4, NULL)

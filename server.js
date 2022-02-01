@@ -1,4 +1,6 @@
-const db = require('./db/connection');
-const {  beginQuestions } = require('./db/queryFunctions');
+const db = require('./db/connections');
+const { beginQuestions} = require('./db/index');
 
+console.log(data);
+console.log('\n');
 beginQuestions();
