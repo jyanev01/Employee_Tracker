@@ -3,11 +3,12 @@ const inquirer = require('inquirer');
 
 const db = require('./connections');
 
-function beginQuestions () {
+beginQuestions = async () => {
     const allQuestions =  await inquirer.prompt([
         {
-            type: 'list',
+            
             name: 'initialQuestions',
+            type: 'list',
             message: "Please select a function",
             choices: [
                 'view all departments',
@@ -48,7 +49,7 @@ function beginQuestions () {
     }
 };
 
-function viewAllEmployees() {
+viewAllEmployees= async () => {
     db.query(
         `SELECT * FROM department`,
         function (err, res) {
@@ -60,7 +61,7 @@ function viewAllEmployees() {
     );
 }
 
-function viewAllRoles() {
+viewAllRoles = async () => {
     db.query(
         `SELECT role.title, role.salary, role.department_id AS dept_id, department.name AS name_of_dept
         FROM role
@@ -75,7 +76,7 @@ function viewAllRoles() {
     );
 }
 
-function viewAllEmployees() {
+viewAllEmployees= async () => {
     db.query(
         `SELECT employees.id, employees.first_name, role.title, department.name AS department, role.salary, CONCAT_WS('', manager.first_name, manager.last_name) AS manager
             FROM employee
@@ -91,7 +92,7 @@ function viewAllEmployees() {
     );
 }
 
-function addDepartment() {
+addDepartment = async () => {
 
     const res = await inquirer.prompt([
         {
@@ -119,7 +120,7 @@ function addDepartment() {
     });
 }
 
-function addRole () {
+addRole = async () => {
     let departments = [];
 
     db.query(`SELECT *FROM department`, (err, rows) => {
@@ -177,7 +178,7 @@ function addRole () {
     });
 }
 
-function addEmployee() {
+addEmployee = async () => {
     
     let roles = [];
 
@@ -232,7 +233,7 @@ function addEmployee() {
     });
 }
 
-function updateEmployee () {
+updateEmployee = async () => {
     let employees = [];
     db.query(`SELECT CONCACT_WS('', employee.first_name, employee.last_name) AS employee_id FROM employee `, (err, rows) => {
         if (err) throw err;
@@ -279,8 +280,8 @@ function updateEmployee () {
 // }
 
 
-function exit () {
+exit =() => {
     process.exit();
 }
 
-beginQuestions();
+module.exports = {beginQuestions};
